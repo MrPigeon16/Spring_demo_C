@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "raylib.h"
 #include <stdlib.h>
-#include <math.h>
 
 
 #define WIDTH 800
@@ -17,14 +16,10 @@ typedef struct Spring
 {
     double distance;
     int point_number;
-    double angle;
     double init_area;
     Rectangle rec[3];
 
 }Spring;
-
-
-
 
 
 
@@ -53,20 +48,22 @@ void update_spring(Spring* s, int new_x)
     }
 }
 
-// b / cos(a)
-
-
-void draw_spring(Rectangle* rec)
+void init_spring(Spring* s)
 {
 
-    int add = 1;
+    s->distance = 20;
+    s->point_number = POINT_NUM - 1;
+    s->init_area = 0.5 * (s->distance * s->distance);
+    Rectangle rec = {0, 200, 10 ,20};
+    
     for(int i = 0; i < POINT_NUM; i++)
     {
-        rec[i].x += add;
-        add *= 1.5;
+           s->rec[i] = rec;
+           rec.x += s->distance;
     }
-    
+
 }
+
 
 int main(int argc, char** argv)
 {
@@ -77,24 +74,11 @@ int main(int argc, char** argv)
      * Arg 2 = k
      *
      * */
-
-
     printf("Spring with RayLib!\n");
     InitWindow(WIDTH, HEIGHT, "Spring Type shit");
     SetTargetFPS(30);
-    
     Spring s = { 0 };
-    s.distance = 20;
-    s.point_number = POINT_NUM - 1;
-    s.init_area = 0.5 * (s.distance * s.distance);
-    Rectangle rec = {0, 200, 10 ,20};
-    
-    for(int i = 0; i < POINT_NUM; i++)
-    {
-           s.rec[i] = rec;
-           rec.x += s.distance;
-    }
-
+    init_spring(&s);
     while(!WindowShouldClose())
     { 
         BeginDrawing();
